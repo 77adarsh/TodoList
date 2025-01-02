@@ -7,14 +7,7 @@ import EditTask from './pages/EditTask';
 import './index.css';
 
 function App() {
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      title: "Complete React Project",
-      description: "Finish the todo app with all features",
-      status: "pending"
-    }
-  ]);
+  const [tasks, setTasks] = useState([]);
 
   return (
     <Router>

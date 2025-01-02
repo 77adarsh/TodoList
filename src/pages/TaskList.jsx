@@ -5,26 +5,31 @@ function TaskList({ tasks, setTasks }) {
     setTasks(tasks.filter((task) => task.id !== taskId));
 
     return (
-        <div className="space-y-4">
-          {tasks.length === 0 ? (
-            <div className="text-center py-8 bg-white bg-opacity-70 backdrop-blur-lg rounded-lg shadow-lg">
-              <p className="text-gray-500 text-lg">No tasks yet. Add one to get started!</p>
-              <Link 
-                to="/add" 
-                className="text-indigo-600 hover:text-indigo-800 font-medium inline-block mt-2"
-              >
-                Add Your First Task
-              </Link>
+      <div className="space-y-4">
+        {tasks.length === 0 ? (
+          <div className="text-center py-8 bg-white bg-opacity-70 backdrop-blur-lg rounded-lg shadow-lg">
+            <p className="text-gray-500 text-lg">
+              No tasks yet. Add one to get started!
+            </p>
+            <Link
+              to="/add"
+              className="text-indigo-600 hover:text-indigo-800 font-medium inline-block mt-2"
+            >
+              Add Your First Task
+            </Link>
+          </div>
+        ) : (
+          tasks.map((task) => (
+            <div
+              key={task.id}
+              className="bg-white bg-opacity-70 backdrop-blur-lg rounded-lg shadow-lg p-6 hover:bg-opacity-80 transition-all duration-300"
+            >
+              {/* task card content */}
             </div>
-          ) : (
-            tasks.map(task => (
-              <div key={task.id} className="bg-white bg-opacity-70 backdrop-blur-lg rounded-lg shadow-lg p-6 hover:bg-opacity-80 transition-all duration-300">
-                {/* ... existing task card content ... */}
-              </div>
-            ))
-          )}
-        </div>
-      );
+          ))
+        )}
+      </div>
+    );
   };
 
   const getStatusColor = (status) => {
