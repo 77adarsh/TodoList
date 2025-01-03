@@ -1,42 +1,29 @@
-import { Link } from "react-router-dom";
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { fetchTasks, deleteTask } from '../features/tasks/taskSlice.js';
 
-function TaskList({ tasks, setTasks }) {
-  const deleteTask = (taskId) => {
-    setTasks(tasks.filter((task) => task.id !== taskId));
+function TaskList() {
+  const dispatch = useDispatch();
+  const { items: tasks, status, error } = useSelector((state) => state.tasks);
 
-    return (
-      <div className="space-y-4">
-        {tasks.length === 0 ? (
-          <div className="text-center py-8 bg-white bg-opacity-70 backdrop-blur-lg rounded-lg shadow-lg">
-            <p className="text-gray-500 text-lg">
-              No tasks yet. Add one to get started!
-            </p>
-            <Link
-              to="/add"
-              className="text-indigo-600 hover:text-indigo-800 font-medium inline-block mt-2"
-            >
-              Add Your First Task
-            </Link>
-          </div>
-        ) : (
-          tasks.map((task) => (
-            <div
-              key={task.id}
-              className="bg-white bg-opacity-70 backdrop-blur-lg rounded-lg shadow-lg p-6 hover:bg-opacity-80 transition-all duration-300"
-            >
-              {/* task card content */}
-            </div>
-          ))
-        )}
-      </div>
-    );
+  useEffect(() => {
+    if (status === 'idle') {
+      dispatch(fetchTasks());
+    }
+  }, [status, dispatch]);
+
+  const handleDeleteTask = (taskId) => {
+    dispatch(deleteTask(taskId));
   };
 
-  const getStatusColor = (status) => {
-    return status === "completed"
-      ? "bg-green-100 text-green-800"
-      : "bg-yellow-100 text-yellow-800";
-  };
+  if (status === 'loading') {
+    return <div className="text-center py-8">Loading...</div>;
+  }
+
+  if (status === 'failed') {
+    return <div className="text-center py-8 text-red-600">Error: {error}</div>;
+  }
 
   return (
     <div className="space-y-4">
@@ -62,9 +49,11 @@ function TaskList({ tasks, setTasks }) {
                 </h3>
                 <p className="text-gray-600 mt-2">{task.description}</p>
                 <span
-                  className={`inline-block px-3 py-1 rounded-full text-sm font-medium mt-3 ${getStatusColor(
-                    task.status
-                  )}`}
+                  className={`inline-block px-3 py-1 rounded-full text-sm font-medium mt-3 ${
+                    task.status === 'completed'
+                      ? 'bg-green-100 text-green-800'
+                      : 'bg-yellow-100 text-yellow-800'
+                  }`}
                 >
                   {task.status}
                 </span>
@@ -77,7 +66,7 @@ function TaskList({ tasks, setTasks }) {
                   Edit
                 </Link>
                 <button
-                  onClick={() => deleteTask(task.id)}
+                  onClick={() => handleDeleteTask(task.id)}
                   className="text-red-600 hover:text-red-800 px-3 py-1 rounded"
                 >
                   Delete

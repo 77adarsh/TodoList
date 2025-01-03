@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateTask } from '../features/tasks/taskSlice.js';
 
-function EditTask({ tasks, setTasks }) {
+function EditTask() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { id } = useParams();
+  const tasks = useSelector((state) => state.tasks.items);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -19,11 +23,9 @@ function EditTask({ tasks, setTasks }) {
     }
   }, [id, tasks, navigate]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setTasks(tasks.map(task => 
-      task.id === parseInt(id) ? { ...formData } : task
-    ));
+    await dispatch(updateTask(formData));
     navigate('/');
   };
 

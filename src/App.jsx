@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useState } from 'react';
 import Navbar from './components/Navbar';
 import TaskList from './pages/TaskList';
 import AddTask from './pages/AddTask';
@@ -7,8 +6,6 @@ import EditTask from './pages/EditTask';
 import './index.css';
 
 function App() {
-  const [tasks, setTasks] = useState([]);
-
   return (
     <Router>
       <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 relative overflow-hidden">
@@ -24,9 +21,9 @@ function App() {
           <div className="max-w-4xl mx-auto px-4 py-8">
             <Navbar />
             <Routes>
-              <Route path="/" element={<TaskList tasks={tasks} setTasks={setTasks} />} />
-              <Route path="/add" element={<AddTask setTasks={setTasks} />} />
-              <Route path="/edit/:id" element={<EditTask tasks={tasks} setTasks={setTasks} />} />
+              <Route path="/" element={<TaskList />} />
+              <Route path="/add" element={<AddTask />} />
+              <Route path="/edit/:id" element={<EditTask />} />
             </Routes>
           </div>
         </div>

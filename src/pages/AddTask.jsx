@@ -1,21 +1,20 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addTask } from '../features/tasks/taskSlice.js';
 
-function AddTask({ setTasks }) {
+function AddTask() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     status: 'pending'
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const newTask = {
-      id: Date.now(),
-      ...formData
-    };
-    setTasks(prev => [...prev, newTask]);
+    await dispatch(addTask(formData));
     navigate('/');
   };
 
