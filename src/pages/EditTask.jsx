@@ -7,13 +7,18 @@ function EditTask() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
+
+  // Get tasks from Redux store
   const tasks = useSelector((state) => state.tasks.items);
+
+  // Local state for form data
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     status: ''
   });
 
+  // Load task data when component mounts
   useEffect(() => {
     const task = tasks.find(t => t.id === parseInt(id));
     if (task) {
@@ -23,6 +28,7 @@ function EditTask() {
     }
   }, [id, tasks, navigate]);
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     await dispatch(updateTask(formData));

@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
+// Async thunk for fetching tasks from API
 export const fetchTasks = createAsyncThunk(
   'tasks/fetchTasks',
   async () => {
@@ -8,12 +9,13 @@ export const fetchTasks = createAsyncThunk(
     return data.map(task => ({
       id: task.id,
       title: task.title,
-      description: task.title,
+      description: task.title, // Using title as description since API doesn't provide one
       status: task.completed ? 'completed' : 'pending'
     }));
   }
 );
 
+// Async thunk for adding a new task
 export const addTask = createAsyncThunk(
   'tasks/addTask',
   async (task) => {
@@ -38,6 +40,7 @@ export const addTask = createAsyncThunk(
   }
 );
 
+// Async thunk for updating a task
 export const updateTask = createAsyncThunk(
   'tasks/updateTask',
   async (task) => {
@@ -57,6 +60,7 @@ export const updateTask = createAsyncThunk(
   }
 );
 
+// Async thunk for deleting a task
 export const deleteTask = createAsyncThunk(
   'tasks/deleteTask',
   async (taskId) => {
@@ -67,6 +71,7 @@ export const deleteTask = createAsyncThunk(
   }
 );
 
+// Create the task slice with reducers and extra reducers for async actions
 const taskSlice = createSlice({
   name: 'tasks',
   initialState: {
@@ -77,6 +82,7 @@ const taskSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      // Handle fetch tasks lifecycle
       .addCase(fetchTasks.pending, (state) => {
         state.status = 'loading';
       })
@@ -88,15 +94,18 @@ const taskSlice = createSlice({
         state.status = 'failed';
         state.error = action.error.message;
       })
+      // Handle add task success
       .addCase(addTask.fulfilled, (state, action) => {
         state.items.push(action.payload);
       })
+      // Handle update task success
       .addCase(updateTask.fulfilled, (state, action) => {
         const index = state.items.findIndex(task => task.id === action.payload.id);
         if (index !== -1) {
           state.items[index] = action.payload;
         }
       })
+      // Handle delete task success
       .addCase(deleteTask.fulfilled, (state, action) => {
         state.items = state.items.filter(task => task.id !== action.payload);
       });

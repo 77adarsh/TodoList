@@ -6,12 +6,15 @@ import { addTask } from '../features/tasks/taskSlice.js';
 function AddTask() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  // Local state for form data
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     status: 'pending'
   });
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     await dispatch(addTask(formData));

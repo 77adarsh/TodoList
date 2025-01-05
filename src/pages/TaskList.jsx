@@ -5,22 +5,27 @@ import { fetchTasks, deleteTask } from '../features/tasks/taskSlice.js';
 
 function TaskList() {
   const dispatch = useDispatch();
+  // Get tasks data from Redux store
   const { items: tasks, status, error } = useSelector((state) => state.tasks);
 
+  // Fetch tasks when component mounts and status is idle
   useEffect(() => {
     if (status === 'idle') {
       dispatch(fetchTasks());
     }
   }, [status, dispatch]);
 
+  // Handle task deletion
   const handleDeleteTask = (taskId) => {
     dispatch(deleteTask(taskId));
   };
 
+  // Show loading state
   if (status === 'loading') {
     return <div className="text-center py-8">Loading...</div>;
   }
 
+  // Show error state
   if (status === 'failed') {
     return <div className="text-center py-8 text-red-600">Error: {error}</div>;
   }
@@ -28,6 +33,7 @@ function TaskList() {
   return (
     <div className="space-y-4">
       {tasks.length === 0 ? (
+        // Show empty state
         <div className="text-center py-8">
           <p className="text-gray-500 text-lg">
             No tasks yet. Add one to get started!
@@ -40,6 +46,7 @@ function TaskList() {
           </Link>
         </div>
       ) : (
+        // Render task list
         tasks.map((task) => (
           <div key={task.id} className="bg-white rounded-lg shadow-md p-6">
             <div className="flex justify-between items-start">
